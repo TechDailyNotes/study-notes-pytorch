@@ -15,3 +15,20 @@ def loss(Y, Y_):
 
 def gradient(X, Y, Y_):
     return np.dot(2 * (Y_ - Y), X).mean()
+
+
+print(f"Prediction before training is {forward(5):.3f}")
+
+n_iters = 20
+lr = 0.01
+
+for epoch in range(n_iters):
+    Y_ = forward(X)
+    los = loss(Y, Y_)
+
+    dw = gradient(X, Y, Y_)
+    w -= lr * dw
+
+    print(f"Epoch {epoch + 1}, Loss {los:.6f}")
+
+print(f"Prediction after training is {forward(5):.3f}")

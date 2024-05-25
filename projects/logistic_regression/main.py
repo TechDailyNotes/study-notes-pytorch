@@ -16,10 +16,6 @@ lr = 0.01
 bc = datasets.load_breast_cancer()
 X, y = bc.data, bc.target
 
-n_samples, n_features = X.shape
-input_dim = n_features
-output_dim = 1
-
 # Step 1.2: Data Preprocessing
 X_train, X_test, y_train, y_test = train_test_split(
     X,
@@ -40,6 +36,11 @@ y_test = torch.from_numpy(y_test.astype(np.float32))
 
 y_train = y_train.view(y_train.shape[0], 1)
 y_test = y_test.view(y_test.shape[0], 1)
+
+# Step 1.4: Data Features
+n_samples, n_features = X.shape
+input_dim = n_features
+output_dim = 1
 
 
 # Step 2: Model Pipeline

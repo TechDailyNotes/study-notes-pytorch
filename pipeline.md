@@ -8,7 +8,7 @@
    4. Data Feature
 2. Model Setup
    1. Architecture Setup
-   2. Loss Function
-   3. Optimizer Selection
+   2. Loss Setup
+   3. Optimizer Setup
 3. Training Loop
 4. Result Test / Result Plot / Result Inference

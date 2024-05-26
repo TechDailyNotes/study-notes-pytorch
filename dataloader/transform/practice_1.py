@@ -1,11 +1,9 @@
-# import math
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
 import torchvision
 
 # Step 0: Hyperparameter Setup
-n_epochs = 2
 batch_size = 4
 
 
@@ -21,6 +19,7 @@ class WineDataset(Dataset):
         )
 
         # Step 1.2: Data Preprocessing
+        self.transform = transform
 
         # Step 1.3: Data Formatting
         self.X = wine[:, 1:]
@@ -29,16 +28,8 @@ class WineDataset(Dataset):
         # Step 1.4: Data Features
         self.n_samples, self.n_features = self.X.shape
 
-        # Step 1.5: Data Accessories
-        self.transform = transform
-
     def __getitem__(self, index):
-        sample = self.X[index], self.y[index]
-
-        if self.transform:
-            sample = self.transform(sample)
-
-        return sample
+        return self.X[index], self.y[index]
 
     def __len__(self):
         return self.n_samples
@@ -52,7 +43,7 @@ class ToTensor:
         return X, y
 
 
-class MulTransform:
+class ScaleByFactor:
     def __init__(self, factor):
         self.factor = factor
 
@@ -62,41 +53,36 @@ class MulTransform:
         return X, y
 
 
-dataset1 = WineDataset(transform=ToTensor())
-dataloader1 = DataLoader(
-    dataset=dataset1,
-    batch_size=batch_size,
-    shuffle=True,
-)
-
-X1, y1 = next(iter(dataloader1))
-print(f"X1 = {X1}")
-print(f"y1 = {y1}")
-
 composed = torchvision.transforms.Compose([
     ToTensor(),
-    MulTransform(2),
+    ScaleByFactor(2),
 ])
-dataset2 = WineDataset(transform=composed)
-dataloader2 = DataLoader(
-    dataset=dataset2,
+
+dataset = WineDataset(transform=composed)
+dataloader = DataLoader(
+    dataset=dataset,
     batch_size=batch_size,
     shuffle=True,
 )
 
-X2, y2 = next(iter(dataloader2))
-print(f"X2 = {X2}")
-print(f"y2 = {y2}")
+X, y = next(iter(dataloader))
+
+print(f"X = {X}")
+print(f"type(X) = {type(X)}")
+print(f"X.shape = {X.shape}")
+
+print(f"y = {y}")
+print(f"type(y) = {type(y)}")
+print(f"y.shape = {y.shape}")
 
 # Step 2: Model Setup
 
-# Step 3: Training Loop
-# n_examples = len(dataset)
-# n_batches = math.ceil(n_examples / batch_size)
+# Step 2.1: Architecture Setup
 
-# for epoch in range(n_epochs):
-#     for batch, (X, y) in enumerate(dataloader):
-#         if batch % 5 == 0:
-#             print(f"Epoch {epoch+1}/{n_epochs}, Batch {batch+1}/{n_batches}, X.shape = {X.shape}, y.shape = {y.shape}")  # noqa: E501
+# Step 2.2: Loss Setup
+
+# Step 2.3: Optimizer Setup
+
+# Step 3: Training Loop
 
 # Step 4: Result Test

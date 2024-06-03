@@ -24,4 +24,8 @@
    2. Loss Setup
    3. Optimizer Setup
 4. Training Loop
+   1. Forward Pass
+   2. Loss Calculation
+   3. Backward Pass
+   4. Optimizer Step
 5. Result Test / Result Plot / Result Inference

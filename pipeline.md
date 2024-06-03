@@ -6,6 +6,7 @@
    2. Data Preprocessing
    3. Data Formatting
    4. Data Feature
+   5. Data Accessories
 2. Model Setup
    1. Architecture Setup
    2. Loss Setup

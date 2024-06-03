@@ -2,9 +2,14 @@ from copy import deepcopy
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+from time import time
 import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.optim.lr_scheduler as lr_scheduler
 from torch.utils.data import DataLoader
 from torchvision.datasets import ImageFolder
+import torchvision.models as models
 import torchvision.transforms as transforms
 from torchvision.utils import make_grid
 
@@ -19,6 +24,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 batch_size = 4
 
 # Step 1.3: Model Params
+lr = 0.001
 
 # Step 1.4: Training Params
 num_epochs = 1
@@ -108,23 +114,36 @@ print()
 
 # Step 2.5: Data Accessories
 
+print("Data loading completed!\n")
+
 # Step 3: Model Setup
 # Step 3.1: Architecture Setup
+model = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
+for param in model.parameters():
+    param.requires_grad = False
+
+in_features = model.fc.in_features
+model.fc = nn.Linear(in_features, 2)
 
 # Step 3.2: Loss Function Setup
+criterion = nn.CrossEntropyLoss()
 
 # Step 3.3: Optimizer Setup
+optimizer = optim.SGD(model.parameters(), lr=lr)
 
 # Step 3.4: Scheduler Setup
+scheduler = lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
 
 
 # Step 4: Training Loop
-def train(model, criterion, optimizer, scheduler):
+def train_model(model, criterion, optimizer, scheduler):
     best_acc = 0.0
     best_wts = deepcopy(model.state_dict())
 
     for epoch in range(num_epochs):
         for phase in phases:
+            time_start = time()
+
             epoch_loss = 0.0
             epoch_acc = 0
 
@@ -154,10 +173,13 @@ def train(model, criterion, optimizer, scheduler):
             if phase == 'train':
                 scheduler.step()
 
+            time_end = time()
+            time_taken = time_end - time_start
+
             epoch_loss /= dataset_sizes[phase]
             epoch_acc /= dataset_sizes[phase]
 
-            print(f"epoch {epoch+1}/{num_epochs}, phase {phase}, loss {epoch_loss:.4f}, accuracy {epoch_acc:.4f}")  # noqa: E501
+            print(f"epoch {epoch + 1}/{num_epochs}, phase {phase}, loss {epoch_loss:.4f}, accuracy {epoch_acc:.4f}, time {time_taken:.4f}s")  # noqa: E501
 
             if phase == 'val' and epoch_acc > best_acc:
                 best_acc = epoch_acc
@@ -166,5 +188,9 @@ def train(model, criterion, optimizer, scheduler):
     model.load_state_dict(best_wts)
     return model
 
+
+model = train_model(model, criterion, optimizer, scheduler)
+
+print("Model training completed!\n")
 
 # Step 5: Result Test

@@ -12,6 +12,7 @@
       4. `lr`
    4. Training Params
       1. `num_epochs`
+   5. Param Tuning
 2. Data Setup
    1. Data Source
    2. Data Preprocessing

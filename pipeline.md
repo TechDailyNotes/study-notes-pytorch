@@ -23,10 +23,12 @@
    1. Architecture Setup
    2. Loss Setup
    3. Optimizer Setup
+   4. Scheduler Setup
 4. Training Loop
    1. Training Setup
       1. Mode Setup
       2. Device Setup
+      3. Grad Setup
    2. Training Pass
       1. Forward Pass
       2. Loss Calculation

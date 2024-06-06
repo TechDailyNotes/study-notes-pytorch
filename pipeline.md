@@ -21,6 +21,8 @@
    5. Data Accessories
 3. Model Setup
    1. Architecture Setup
+      1. Module Setup
+      2. Module Connection
    2. Loss Setup
    3. Optimizer Setup
    4. Scheduler Setup

@@ -22,3 +22,13 @@ z4 = x.matmul(y)
 print(f"x = {x}")
 print(f"y = {y}")
 print(f"z4 = {z4}")
+
+x2 = torch.ones(3, 2, 3)
+y2 = torch.ones(3, 3, 4)
+print(f"x2 = {x2}")
+print(f"y2 = {y2}")
+
+z2_1 = torch.bmm(x2, y2)
+z2_2 = x2.bmm(y2)
+print(f"z2_1 = {z2_1}")
+print(f"x2_2 = {z2_2}")

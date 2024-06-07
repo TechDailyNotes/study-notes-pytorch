@@ -1,8 +1,11 @@
 import os
 import pandas as pd
 from PIL import Image
+import spacy
+import spacy.tokenizer
 import torch
 from torch.utils.data import Dataset
+from collections import defaultdict
 
 
 class Vocabulary:
@@ -11,11 +14,32 @@ class Vocabulary:
         self.stoi = {'<PAD>': 0, '<SOS>': 1, '<EOS>': 2, '<UNK>': 3}
         self.frequency = frequency
 
+    def __len__(self):
+        return len(self.itos)
+
+    @staticmethod
+    def tokenizer_eng(text):
+        return [tok.text.lower() for tok in spacy.tokenizer(text)]
+
     def build_vocabulary(self, sentences):
-        pass
+        frequencies = defaultdict(int)
+        idx = 4
+
+        for sentence in sentences:
+            for word in self.tokenizer_eng(sentence):
+                frequencies[word] += 1
+
+                if frequencies[word] == self.frequency:
+                    self.itos[idx] = word
+                    self.stoi[word] = idx
+                    idx += 1
 
     def numericalize(self, caption):
-        pass
+        tokenized_text = self.tokenizer_eng(caption)
+        return [
+            self.stoi[token] if token in self.stoi else self.stoi['<UNK>']
+            for token in tokenized_text
+        ]
 
 
 class FlickerDataset(Dataset):

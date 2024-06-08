@@ -44,8 +44,21 @@
 ### Pixel Data
 
 1. Images
-   1. Resize
-   2. ToTensor
+   1. D-Type
+      1. ToPILImage
+      2. ToTensor
+   2. Size
+      1. Resize
+      2. RandomCrop
+   3. Orientation
+      1. RandomRotation
+      2. RandomHorizontalFlip
+      3. RandomVerticalFlip
+   4. Color
+      1. RandomGrayscale
+      2. ColorJitter
+   5. Distribution
+      1. Normalize
 
 ### Sequence Data
 

@@ -50,8 +50,8 @@
 ### Sequence Data
 
 1. Text
-   1. Tokenizing
-   2. Numericalizing
-      1. Indexing
-      2. Embedding
-   3. Padding
+   1. Tokenize
+   2. Numericalize
+      1. Index
+      2. Embed
+   3. Pad

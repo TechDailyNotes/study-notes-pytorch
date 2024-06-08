@@ -1,11 +1,16 @@
+from collections import defaultdict
 import os
 import pandas as pd
 from PIL import Image
 import spacy
 import spacy.tokenizer
 import torch
-from torch.utils.data import Dataset
-from collections import defaultdict
+from torch.nn.utils.rnn import pad_sequence
+from torch.utils.data import Dataset, DataLoader
+import torchvision.transforms as transforms
+
+
+spacy_eng = spacy.load('en_core_web_sm')
 
 
 class Vocabulary:
@@ -19,7 +24,7 @@ class Vocabulary:
 
     @staticmethod
     def tokenizer_eng(text):
-        return [tok.text.lower() for tok in spacy.tokenizer(text)]
+        return [tok.text.lower() for tok in spacy_eng.tokenizer(text)]
 
     def build_vocabulary(self, sentences):
         frequencies = defaultdict(int)
@@ -69,3 +74,48 @@ class FlickerDataset(Dataset):
         numericalized_caption.append(self.vocab.stoi['<EOS>'])
 
         return img, torch.tensor(numericalized_caption)
+
+
+class MyCollate:
+    def __init__(self, pad_idx):
+        self.pad_idx = pad_idx
+
+    def __call__(self, batch):
+        imgs = [item[0].unsqueeze(0) for item in batch]
+        imgs = torch.cat(imgs, dim=0)
+        targets = [item[1] for item in batch]
+        targets = pad_sequence(
+            targets, batch_first=True, padding_value=self.pad_idx,
+        )
+        return imgs, targets
+
+
+def get_loader(
+    root_dir, captions_file, transform, batch_size=32, num_workers=11,
+    pin_memory=True,
+):
+    dataset = FlickerDataset(root_dir, captions_file, transform)
+    dataloader = DataLoader(
+        dataset=dataset, batch_size=batch_size, shuffle=True,
+        num_workers=num_workers, persistent_workers=True,
+        pin_memory=pin_memory,
+        collate_fn=MyCollate(pad_idx=dataset.vocab.stoi['<PAD>']),
+    )
+    return dataloader
+
+
+def main():
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+    ])
+    dataloader = get_loader('data/images', 'data/captions.txt', transform)
+
+    imgs, captions = next(iter(dataloader))
+    print(f"len(dataloader) = {len(dataloader)}")
+    print(f"imgs.shape = {imgs.shape}")
+    print(f"captions.shape = {captions.shape}")
+
+
+if __name__ == '__main__':
+    main()

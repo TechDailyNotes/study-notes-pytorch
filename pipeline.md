@@ -44,7 +44,8 @@
 ### Pixel Data
 
 1. Images
-   1. Transforming
+   1. Resize
+   2. ToTensor
 
 ### Sequence Data
 

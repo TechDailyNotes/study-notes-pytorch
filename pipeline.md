@@ -38,3 +38,19 @@
       4. Optimizer Step
       5. Scheduler Step
 5. Result Test / Result Plot / Result Inference
+
+## Data Pipeline
+
+### Pixel Data
+
+1. Images
+   1. Transforming
+
+### Sequence Data
+
+1. Text
+   1. Tokenizing
+   2. Numericalizing
+      1. Indexing
+      2. Embedding
+   3. Padding

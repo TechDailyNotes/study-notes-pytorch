@@ -16,7 +16,7 @@ batch_size = 64
 
 z_chans, img_chans, img_height, img_width = 100, 1, 64, 64
 dis_hidden_chans, gen_hidden_chans = 64, 64
-lr = 5e-5
+lr = 5e-4
 
 num_epochs = 10
 num_crits = 5

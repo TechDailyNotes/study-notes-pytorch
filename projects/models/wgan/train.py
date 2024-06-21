@@ -55,6 +55,8 @@ for epoch in range(num_epochs):
         dis.train()
         gen.train()
 
+        img_real = img_real.to(device)
+
         # Step 1: Train discriminator.
         for _ in range(num_crits):
             img_noise = torch.randn((batch_size, z_chans, 1, 1)).to(device)
@@ -79,7 +81,7 @@ for epoch in range(num_epochs):
         optim_gen.step()
 
         # Step 3: Result Inference.
-        if (batch + 1) % 1 == 0:
+        if (batch + 1) % 10 == 0:
             print(
                 f"epoch {epoch + 1}/{num_epochs}, "
                 f"batch {batch + 1}/{num_batches}, "

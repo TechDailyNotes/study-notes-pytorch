@@ -81,7 +81,7 @@ for epoch in range(num_epochs):
         optim_gen.step()
 
         # Step 3: Result Inference.
-        if (batch + 1) % 10 == 0:
+        if (batch + 1) % 100 == 0:
             print(
                 f"epoch {epoch + 1}/{num_epochs}, "
                 f"batch {batch + 1}/{num_batches}, "

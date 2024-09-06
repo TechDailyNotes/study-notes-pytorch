@@ -21,6 +21,10 @@
 1. Problem: After forwarding and backwarding, GPUs need to communicate with each other for All-Reduce accumulation. GPUs are idle, except waiting for result, during this time.
 2. Solution: Bucketing - PyTorch splits the model into buckets and send buckets of layers for All-Reduce immediately after backwarding.
 
+## `torchrun`
+
+1. `torchrun` facilitates graceful distributed training and automatically handles failover. It uses the model snapshot or checkpoint to recover the training process when a worker fails.
+
 ## Resources
 
 1. Paperspace:
